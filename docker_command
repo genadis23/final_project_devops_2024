@@ -1,0 +1,59 @@
+#check instation docker#
+sudo systemctl status docker
+
+
+
+docker login
+sudo apt update
+sudo apt install python3
+python3 --version
+
+
+
+
+
+create virtual env
+
+
+sudo apt install python3-venv
+
+
+python3 -m venv myenv
+
+
+
+
+deactivate
+
+deactivate
+
+
+###########################################################
+
+docker build -t my-python-app .
+
+
+
+
+docker exec -it <container_id> /bin/sh
+
+
+install curl
+
+apk update
+apk add curl
+
+
+docker image build _contailner
+
+docker build -t my-image-name .
+
+
+
+docker run -d --name my-container-name my-image-name
+docker exec -it my-container-name /bin/bash
+
+
+remove ---
+docker stop my-container-name
+docker rm my-container-name
