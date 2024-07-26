@@ -1,8 +1,10 @@
 ##############post command ################################
 
-Invoke-WebRequest -Uri http://127.0.0.1:5000/task/add -Method POST -ContentType "application/json" -Body '{"task_name": "Feed the cat"}'
+Invoke-RestMethod -Uri http://127.0.0.1:5001/task/add -Method POST -ContentType "application/json" -Body '{"task_name": "toll the cat"}'
 
 
 ################delete task ####################################################
 
-Invoke-WebRequest -Uri http://127.0.0.1:5000/task/delete/6 -Method DELETE -ContentType "application/json" 
+Invoke-RestMethod -Uri http://127.0.0.1:5001/task/delete/7 -Method DELETE
+
+######################################################################################################################################
