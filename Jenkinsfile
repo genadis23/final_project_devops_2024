@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
+                git branch: 'main', url: 'https://github.com/genadis23/final_project_devops_2024.git'
             }
         }
         
@@ -16,8 +16,8 @@ pipeline {
                         echo "Changes detected:"
                         echo changes
                         emailext body: "The following changes were detected in the repository:\n\n${changes}", 
-                                 subject: "GitHub Changes Detected", 
-                                 to: "your-email@example.com"
+                                 subject: "Jenkins detect changes in github", 
+                                 to: "genadis23@gmail.com"
                     } else {
                         echo "No changes detected"
                     }
