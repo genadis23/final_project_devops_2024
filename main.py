@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-import json
 
 app = Flask(__name__)
 
@@ -10,9 +9,11 @@ tasks = {
     4: {'task_name': 'tal is the best'}
 }
 
+
 @app.route('/task', methods=['GET'])
 def get_tasks():
     return jsonify(tasks)
+
 
 @app.route('/task/<int:task_id>', methods=['GET'])
 def get_task(task_id):
@@ -20,6 +21,7 @@ def get_task(task_id):
     if task:
         return jsonify(task)
     return jsonify({'error': 'Task not found'}), 404
+
 
 @app.route('/task/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
@@ -29,6 +31,7 @@ def update_task(task_id):
         return jsonify({'message': 'Task updated'})
     return jsonify({'error': 'Task not found'}), 404
 
+
 @app.route('/task/add', methods=['POST'])
 def add_task():
     # Use request.json to directly access the parsed JSON data
@@ -37,12 +40,14 @@ def add_task():
     tasks[new_id] = {'task_name': data_json.get('task_name')}  # Assuming you want to store it this way
     return jsonify({'message': 'Task added', 'id': new_id})
 
+
 @app.route('/task/delete/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
     if task_id in tasks:
         del tasks[task_id]
         return jsonify({'message': 'Task deleted'})
     return jsonify({'error': 'Task not found'}), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)
