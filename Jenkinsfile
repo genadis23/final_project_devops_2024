@@ -37,7 +37,7 @@ pipeline {
 
 def notifySlack(Map notifyParams) {
     script {
-        String userName = "genadis23@gmail.com"
+        String userName = "genadis23"
         echo "Job status: ${currentBuild?.currentResult}"
         if (currentBuild?.resultIsBetterOrEqualTo('SUCCESS')) {
             ADDED_INFO = "Previous build ${currentBuild?.getPreviousBuild()?.number} failed and now it has been fixed."
