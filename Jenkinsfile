@@ -1,26 +1,42 @@
 pipeline {
-    agent any
-
+    agent {
+        node {
+            label 'agent'
+            customWorkspace "./workspace/${JOB_NAME}/$BUILD_NUMBER"
+        }
+    }
     stages {
-        stage('Checkout') {
+        stage("Initialize") {
             steps {
-                git branch: 'main', url: 'https://github.com/genadis23/final_project_devops_2024.git'
+                sh 'make venv'
+                withPythonEnv("${env.WORKSPACE}/.venv/bin/python3") {
+                    sh 'make install-requirements'
+                }
             }
         }
-        
-        stage('Check Changes') {
+        stage("Lint") {
             steps {
-                script {
-                    def changes = getChanges()
-                    if (changes) {
-                        echo "Changes detected:"
-                        echo changes
-                        emailext body: "The following changes were detected in the repository:\n\n${changes}", 
-                                 subject: "Jenkins detect changes in github", 
-                                 to: "genadis23@gmail.com"
-                    } else {
-                        echo "No changes detected"
-                    }
+                withPythonEnv("${env.WORKSPACE}/.venv/bin/python3") {
+                    sh 'make lint'
+                }
+            }
+        }
+        stage("Docker Build") {
+            steps {                                
+                sh 'make build-image'
+                                                
+            }
+        }
+        stage('Docker Push') {
+            when {
+                anyOf {
+                    branch 'main'
+                }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                    sh 'make push-image'
                 }
             }
         }
@@ -68,17 +84,4 @@ def notifySlack(Map notifyParams) {
         }
     }
     slackSend channel: "final_project_2024_genadi", message: "${SLACK_MESSAGE}", color: "${NOTIFICATION_COLOR}"
-}
-
-def getChanges() {
-    def changeLog = ""
-    def changeLogSets = currentBuild.changeSets
-    for (int i = 0; i < changeLogSets.size(); i++) {
-        def entries = changeLogSets[i].items
-        for (int j = 0; j < entries.length; j++) {
-            def entry = entries[j]
-            changeLog += "- ${entry.msg} [${entry.author}]\n"
-        }
-    }
-    return changeLog
 }

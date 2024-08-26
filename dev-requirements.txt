@@ -1,1 +1,3 @@
+#ruff allow me to check bug on my code and fix it -like checker#
 ruff
+#all check will be done by used ruff.toml file #

@@ -2,13 +2,24 @@ version: '3.8'
 
 services:
   jenkins:
-    image: khizunov/jenkins_tls_docker
+    image: genadis23/jenkins:master
     privileged: true
     user: root
     ports:
-      - 8080:8080
+      - 8082:8080
       - 50000:50000
     container_name: jenkins
     volumes:
       - /Users/Genadi_king/jenkins_compose/jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+  agent:
+    image: genadis23/jenkins:agent
+    privileged: true
+    user: root
+    expose:
+      - 22
+    container_name: agent
+    volumes:    
+      - /var/run/docker.sock:/var/run/docker.sock:xr 
+    environment:
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCoAqobXL99ZGKorcfJdN09EZ/WlJ/aPeEnLNg4aX+WC6UpbBuv7EUa8wo1gj+ykTSUTauCLfYAYsEtk1KHXvbxKEvip23Lcdz6gjkjgUzDpjEo5bX1D22a9zW9J4LlBVh7AzxsXbujjTOmd3yx7BNyAGDDhrxEkZYIin7Ku+qz3GTzfw9xZ2ZtsS2W7u/bWfrZ2vO8zQ7/3zpZflWoOVuaLhPbxjYFoZiqoXi8XXK8XXAqOsOEZlaIFcOcn2C9z6aYJGY8kp3aEnEhWXPwBp5PH0l+bo9q+qJdOjKObVkQek6CHCsca2TQXPw6DIWNWDlgU3C4c45pTHwGZ+FZ9L7QFecKN3lO9emR0hSsD5jMtTzNgN4OpxB5RSJjIsub9epkg6UuFjnOvWzYFu/qA7z5CK12F9izXX+pzoAoVVykOn6Gx8lFkKxwMs0to+q4mdXj22MdTzPy/iERNPR6DNQrnhAfaLFpRvCOJRQeYWl7zPxsu2BcdNQ2DwiOvJPXJP0=
